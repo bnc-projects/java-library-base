@@ -1,0 +1,100 @@
+plugins {
+    id 'eclipse'
+    id 'idea'
+    id 'java-library'
+    id 'jacoco'
+    id 'checkstyle'
+    id 'maven-publish'
+    id "org.sonarqube" version "2.7"
+    id "com.github.spotbugs" version "1.6.9"
+    id "com.bnc.gradle.travis-ci-versioner" version "1.0.6"
+}
+
+group = 'com.bnc'
+sourceCompatibility = JavaVersion.VERSION_11
+targetCompatibility = JavaVersion.VERSION_11
+compileJava.options.encoding = "UTF-8"
+
+ext {
+    awsAccessKeyId = hasProperty('AWS_ACCESS_KEY_ID') ? AWS_ACCESS_KEY_ID : System.getenv('AWS_ACCESS_KEY_ID')
+    awsSecretAccessKey = hasProperty('AWS_SECRET_ACCESS_KEY') ? AWS_SECRET_ACCESS_KEY : System.getenv('AWS_SECRET_ACCESS_KEY')
+}
+
+travisVersioner {
+    major 0
+    minor 0
+}
+
+repositories {
+    mavenCentral()
+    jcenter()
+    maven {
+        url "s3://artifact.bravenewcoin.com.s3-website-us-west-2.amazonaws.com/maven/release"
+        credentials(AwsCredentials) {
+            accessKey "${awsAccessKeyId}"
+            secretKey "${awsSecretAccessKey}"
+        }
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
+
+    repositories {
+        maven {
+            url "s3://artifact.bravenewcoin.com/maven/${project.version.endsWith('-SNAPSHOT') ? 'snapshot' : 'release'}"
+            credentials(AwsCredentials) {
+                accessKey "${awsAccessKeyId}"
+                secretKey "${awsSecretAccessKey}"
+            }
+        }
+    }
+}
+
+sonarqube {
+    properties {
+        property "sonar.projectKey", "${rootProject.name}"
+    }
+}
+spotbugs {
+    toolVersion = '3.1.12'
+    tasks.withType(com.github.spotbugs.SpotBugsTask) {
+        reports {
+            xml.enabled = false
+            html.enabled = true
+        }
+    }
+}
+
+jacoco {
+    toolVersion = "0.8.3"
+}
+
+checkstyle {
+    toolVersion '8.19'
+    tasks.withType(Checkstyle) {
+        reports {
+            xml.enabled false
+            html.enabled true
+        }
+    }
+}
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+}
+
+dependencies {
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter', version: '5.4.1'
+    testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.12.2'
+    testImplementation group: 'org.mockito', name: 'mockito-core', version: '2.26.0'
+    testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter', version: '2.26.0'
+    testRuntime group: 'org.junit.platform', name: 'junit-platform-launcher', version: '1.4.1'
+}
