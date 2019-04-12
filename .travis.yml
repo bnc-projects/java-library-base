@@ -15,11 +15,13 @@ cache:
   - "$HOME/.gradle/caches/"
   - "$HOME/.gradle/wrapper/"
 after_success:
-- "./gradlew sonarqube"
+  - ./gradlew sonarqube
 deploy:
-  if: env(AWS_ACCESS_KEY_ID) IS NOT blank AND env(AWS_SECRET_ACCESS_KEY) IS NOT blank
   provider: script
-  script: "./gradlew publish"
+  skip_cleanup: true
+  script: ./gradlew publish
+  on:
+    all_branches: true
 addons:
   sonarcloud:
     organization: bnc-projects
