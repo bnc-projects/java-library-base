@@ -14,18 +14,8 @@ cache:
   directories:
   - "$HOME/.gradle/caches/"
   - "$HOME/.gradle/wrapper/"
-jobs:
-  include:
-  - stage: test
-    after_success:
-      - ./gradlew sonarqube
-  - stage: publish artifacts
-    if: env(AWS_ACCESS_KEY_ID) IS NOT blank AND env(AWS_SECRET_ACCESS_KEY) IS NOT blank
-    script: skip
-    deploy:
-      provider: script
-      skip_cleanup: true
-      script: bash gradlew publish
+after_success:
+  - ./gradlew sonarqube
 addons:
   sonarcloud:
     organization: bnc-projects
