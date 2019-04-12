@@ -1,23 +1,23 @@
 language: java
 jdk:
-- openjdk11
+  - openjdk11
 env:
   global:
-  - AWS_ACCESS_KEY_ID=
-  - AWS_SECRET_ACCESS_KEY=
+    - AWS_ACCESS_KEY_ID=
+    - AWS_SECRET_ACCESS_KEY=
 before_cache:
-- rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
-- rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
 cache:
   directories:
-  - "$HOME/.gradle/caches/"
-  - "$HOME/.gradle/wrapper/"
+    - "$HOME/.gradle/caches/"
+    - "$HOME/.gradle/wrapper/"
 after_success:
-- "./gradlew sonarqube"
+  - ./gradlew sonarqube
 deploy:
   if: env(AWS_ACCESS_KEY_ID) IS NOT blank AND env(AWS_SECRET_ACCESS_KEY) IS NOT blank
   provider: script
-  script: "./gradlew publish"
+  script: ./gradlew publish
 addons:
   sonarcloud:
     organization: bnc-projects
