@@ -2,11 +2,6 @@ language: java
 jdk:
 - openjdk11
 dist: xenial
-addons:
-  snaps:
-    - name: aws-cli
-      confinement: classic
-      channel: latest/edge
 env:
   global:
   - AWS_ACCESS_KEY_ID=
@@ -32,6 +27,10 @@ deploy:
   on:
     all_branches: true
 addons:
+  snaps:
+    - name: aws-cli
+      confinement: classic
+      channel: latest/edge
   sonarcloud:
     organization: bnc-projects
     token:
