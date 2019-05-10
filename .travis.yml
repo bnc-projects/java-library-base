@@ -1,10 +1,17 @@
 language: java
 jdk:
 - openjdk11
+dist: xenial
+addons:
+  snaps:
+    - name: aws-cli
+      confinement: classic
+      channel: latest/edge
 env:
   global:
   - AWS_ACCESS_KEY_ID=
   - AWS_SECRET_ACCESS_KEY=
+  - OPERATIONS_ROLE_ARN=
   - secure: V6G+YytFd/xB26nsvg/4zHTIencV0xgsve53ojfMjkQkkvrzXswZiVfCuatdPEx9iG6E+v8WAk5jJD3K+puJq6h1ohVhGvHxwRQQjoJWns+5HgXjg7y/Qn3kshiU3hwFmEVpqFsxoNxZrrVKroLS93cIz4wrhx6Edhla50K1xptlNSAf10O1QDpck9jN3UBzj4B1854xIJiXq3qshw/eC8Qu4K3e+lYxzUZ9N9Z8OcL2nyiE4A9lFAuiO0cNov8nqbE2WJwiLJG8ohqEeIOiAfQ2dZISDA3RGVuBfzKOYvXWPshmshX1dXVucMPhtjBRYgJLuKrQACkXMIeTMOhXQ1MP2RtsLWYrH5YALTfVV8fQqzkID+iE167pny3SleVvXbZ0FkzbSYOxXgfr21izD5bQlBIN1dqA2xIIjPXf6i622baEwXe0A9Poby7llr6HlGfmwaesxmu1oNQMf9EsU4HmjNZ6QGjNrMvYpDiK8uoKA+P7SarZPmQpI2Jb1t0BYVnsl4tYpGjtN/KpcX+cG9CIARcHTFUUVeqxtr8bZddCwfJFfRszRyWBK5TD+j9qaJoYGqg57uTHcRLQLh5a+CIVJHe6Jksy8+tXqmoCycCgQEAozQqHCQsCsv/7s5aKMIrrbUo4mOez0gF2g+yUji4jx+hb04y6+JmI8Z9Rk3A=
   - secure: t1RI8aWMqTNuk7CoEcDT8KIpiX0h7YuYEbI+k4HrbNsQ8kAifncdu7s835wYC8OUEE7KZl5srZJx3vnLqbati2Q6Y7pfhO2m+BPalXadEAedhLf13V33R7ESbxbnbjoP+Vd3CDAqWeZHQ/5G3wAWS3wlIFZkD425BNyJZFdP9GAdPugMXu4r9nEqzX2EmLCIRNNc83qS1HDWzzP9s+x3Lr6zGoMG4HmCHdtkgxlHOBAPqVWxb4Aq8lQGmibNBQTYJXmDLm2jZoeWaRDJG2n56GRprvpLjB+B2WB+2KZk15i8ShjhJwS9+p2eJygu69QYoZjFnznl5C6IEHzW5sflKMtA8TBoKC8oHgUEbPaxmh91Xb4R/5CHOpfIUmpyknNusdSVMG9M89bWln6OjAVRA4qLO050U0YhB1GqtREYsKPPF6c4Ji4nIfHL6DzIanvplqHzq5mx5GHmt3hm2YpPo7uWWnPv3VywqgepMGYEl0TObZfBvK2wmyWIZcpr6R+ClwYF+k8GnJhTwzRj6dKQ3qnVLc74MdlUYOAFaV6TbBcNJRFAMg3jyi/XLTHvzdsFvcXPA1Q/HaU6SL9FE/HwFEe0pMvKKRG6vjQBMbVdpymHgbdz8OdYBq5ibVRMNNN5GRdIJat3ikr/QDInLUMRLOuFAncgosP9FmmD9QAvP6Q=
 before_cache:
@@ -14,6 +21,8 @@ cache:
   directories:
   - "$HOME/.gradle/caches/"
   - "$HOME/.gradle/wrapper/"
+before_install:
+  - aws --version
 after_success:
   - ./gradlew sonarqube
 deploy:
