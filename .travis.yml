@@ -30,7 +30,7 @@ addons:
   snaps:
     - name: aws-cli
       confinement: classic
-      channel: latest/edge
+      channel: latest/stable
   sonarcloud:
     organization: bnc-projects
     token:
