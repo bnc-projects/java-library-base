@@ -5,8 +5,8 @@ plugins {
     id 'jacoco'
     id 'checkstyle'
     id 'maven-publish'
-    id "org.sonarqube" version "2.7"
-    id "com.github.spotbugs" version "1.6.9"
+    id "org.sonarqube" version "2.7.1"
+    id "com.github.spotbugs" version "2.0.0"
     id "com.bnc.gradle.travis-ci-versioner" version "1.0.6"
 }
 
@@ -99,9 +99,9 @@ test {
 }
 
 dependencies {
-    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter', version: '5.4.1'
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter', version: '5.4.2'
     testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.12.2'
-    testImplementation group: 'org.mockito', name: 'mockito-core', version: '2.26.0'
-    testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter', version: '2.26.0'
-    testRuntime group: 'org.junit.platform', name: 'junit-platform-launcher', version: '1.4.1'
+    testImplementation group: 'org.mockito', name: 'mockito-core', version: '2.28.2'
+    testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter', version: '2.28.2'
+    testRuntime group: 'org.junit.platform', name: 'junit-platform-launcher', version: '1.4.2'
 }
